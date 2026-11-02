@@ -1,0 +1,12 @@
+! TPSS PCSSEG-1 AUTOAUX PAL8
+
+% maxcore 4000
+
+* xyzfile 0 1 file.xyz
+ 
+%eprnmr  
+  Ori    = GIAO
+  Nuclei = 1 { shift }
+  TAU DOBSON
+  end
+

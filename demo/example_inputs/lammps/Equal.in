@@ -1,0 +1,199 @@
+atom_style      full
+units           real
+dimension       3
+boundary        p p p
+bond_style      class2
+angle_style     class2
+dihedral_style  class2
+improper_style  class2
+pair_style      lj/class2/coul/long 12.0 12.0
+pair_modify     shift yes mix sixthpower
+special_bonds   lj/coul 0.0 0.0 1.0
+
+kspace_style    pppm 0.00001
+
+read_data       PP.data
+
+minimize        1.0e-6 1.0e-8 100000 400000
+
+#neigh_modify    delay 10 every 1 check yes page 1000000 one 20000
+
+timestep        1.0
+run_style       verlet
+
+thermo_style    custom step temp etotal pe ebond eangle edihed ecoul elong evdwl lx density
+thermo_modify   format float %14.6f
+thermo          1000
+
+velocity        all create 300 234 mom yes rot yes dist gaussian
+
+dump            1 all atom 10000 DVOCB1.lammpstrj
+dump_modify     1 scale no
+dump_modify     1 sort id
+
+fix             fxnve all nve/limit 0.1
+fix             fxlgv all langevin 300 300 100 1118
+
+run             10000
+
+write_data      nve.data
+
+unfix           fxnve
+unfix           fxlgv
+
+fix             fxnvt all nvt temp 300 300 100.0
+
+run             400000
+
+write_data      nvt.data
+
+unfix           fxnvt
+
+fix             fxnpt all npt temp 300 300 100.0 iso 1.0 1.0 1000.0
+
+run             1000000
+
+write_data      final1.data
+
+unfix           fxnpt
+
+#1
+fix             1 all nvt temp 800.0 800.0 100
+velocity        all create 800.0 234 mom yes rot yes dist gaussian
+
+run             100000
+
+run             50000
+unfix           1
+
+#2
+fix             1 all nvt temp 300.0 300.0 100
+velocity        all scale 300
+run             50000
+unfix           1
+
+#3
+fix             1 all npt temp 300.0 300.0 100 iso 1000 1000 100
+velocity        all scale 300
+run             50000
+unfix           1
+
+#4
+fix             1 all nvt temp 800.0 800.0 100
+velocity        all scale 800
+run             50000
+unfix           1
+
+#5
+fix             1 all nvt temp 300.0 300.0 100
+velocity        all scale 300
+run             100000
+unfix           1
+
+#6
+fix             1 all npt temp 300.0 300.0 100 iso 30000 30000 100
+velocity        all scale 300
+run             50000
+unfix           1
+
+#7
+fix             1 all nvt temp 800.0 800.0 100
+velocity        all scale 800
+run             50000
+unfix           1
+
+#8
+fix             1 all nvt temp 300.0 300.0 100
+velocity        all scale 300
+run             100000
+unfix           1
+
+#9
+fix             1 all npt temp 300.0 300.0 100 iso 50000 50000 100
+velocity        all scale 300
+run             50000
+unfix           1
+
+#10
+fix             1 all nvt temp 800.0 800.0 100 
+velocity        all scale 800
+run             50000
+unfix           1
+
+#11
+fix             1 all nvt temp 300.0 300.0 100 
+velocity        all scale 300
+run             100000
+unfix           1
+
+#12
+fix             1 all npt temp 300.0 300.0 100 iso 25000 25000 100
+velocity        all scale 300
+run             5000
+unfix           1
+
+#13
+fix             1 all nvt temp 800.0 800.0 100
+velocity        all scale 800
+run             5000
+unfix           1
+
+#14
+fix             1 all nvt temp 300.0 300.0 100
+velocity        all scale 300
+run             10000
+unfix           1
+
+#15
+fix             1 all npt temp 300.0 300.0 100 iso 5000 5000 100
+velocity        all scale 300
+run             5000
+unfix           1
+
+#16
+fix             1 all nvt temp 800.0 800.0 100
+velocity        all scale 800
+run             5000
+unfix           1
+
+#17
+fix             1 all nvt temp 300.0 300.0 100
+velocity        all scale 300
+run             10000
+unfix           1
+
+#18
+fix             1 all npt temp 300.0 300.0 100 iso 500 500 100
+velocity        all scale 300
+run             5000
+unfix           1
+
+#19
+fix             1 all nvt temp 800.0 800.0 100
+velocity        all scale 800
+run             5000
+unfix           1
+
+#20
+fix             1 all nvt temp 300.0 300.0 100
+velocity        all scale 300
+run             10000
+unfix           1
+
+
+write_data      final2.data
+
+reset_timestep  0
+
+undump          1
+
+dump            2 all atom 1000 DVOCB2.lammpstrj
+dump_modify     2 scale no
+dump_modify     2 sort id
+
+fix             1 all npt temp 300.0 300.0 100 iso 1 1 1000
+velocity        all scale 300
+run             1000000
+write_data      final2.data
+run             1000000
+write_data      final2.data

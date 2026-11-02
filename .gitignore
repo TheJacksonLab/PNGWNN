@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.venv*/
+.agents/
+/dataset/train/
+/dataset/test/
+/demo/Dataset_Spectrum/
+models/checkpoints/
+models/*.pth
+demo/outputs/
